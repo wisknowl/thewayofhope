@@ -1,0 +1,11 @@
+# Public directory configuration
+RewriteEngine On
+
+# Allow direct access to files in public directory
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^(.*)$ - [L]
+
+# Redirect everything else to main index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

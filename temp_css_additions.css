@@ -1,0 +1,165 @@
+/* Enhanced Logo */
+.logo img {
+    height: 50px; /* Increased from 40px */
+    margin-right: 0.5rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+    transform: scale(1.05);
+}
+
+/* Navigation Dropdown */
+.nav-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.nav-dropdown-toggle {
+    background: none;
+    border: none;
+    color: var(--background-white);
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.header.scrolled .nav-dropdown-toggle {
+    color: var(--text-dark-grey);
+    text-shadow: none;
+}
+
+.nav-dropdown-toggle:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.header.scrolled .nav-dropdown-toggle:hover {
+    background: rgba(26, 79, 140, 0.1);
+}
+
+.dropdown-arrow {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.nav-dropdown.active .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--background-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    min-width: 180px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    border: 1px solid var(--border-light);
+}
+
+.nav-dropdown.active .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-dropdown-menu a {
+    display: block;
+    padding: 0.75rem 1rem;
+    color: var(--text-dark-grey);
+    text-decoration: none;
+    transition: var(--transition);
+    border-bottom: 1px solid var(--border-light);
+    font-weight: 500;
+}
+
+.nav-dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.nav-dropdown-menu a:hover {
+    background: var(--primary-blue);
+    color: var(--background-white);
+}
+
+/* Floating Donate Button */
+.floating-donate-btn {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.btn-donate-floating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-yellow);
+    color: var(--text-dark-grey);
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    box-shadow: var(--shadow-medium);
+    transition: all 0.3s ease;
+    animation: pulse 2s infinite;
+}
+
+.btn-donate-floating:hover {
+    background: #e6b520;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(244, 200, 36, 0.4);
+}
+
+.donate-icon {
+    font-size: 1.25rem;
+}
+
+.donate-text {
+    font-size: 0.9rem;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(244, 200, 36, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(244, 200, 36, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(244, 200, 36, 0); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .floating-donate-btn {
+        right: 15px;
+        bottom: 20px;
+        top: auto;
+        transform: none;
+    }
+    
+    .btn-donate-floating {
+        padding: 0.75rem 1rem;
+        border-radius: 40px;
+    }
+    
+    .donate-text {
+        display: none;
+    }
+    
+    .nav-dropdown-menu {
+        right: -50px;
+        min-width: 200px;
+    }
+}
+

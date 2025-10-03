@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://thewayofhope.org/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /config/
+Disallow: /app/
+Disallow: /database/
+
+# Allow important pages
+Allow: /
+Allow: /about
+Allow: /programs
+Allow: /get-involved
+Allow: /donate
+Allow: /news
+Allow: /events
+Allow: /gallery
+Allow: /store
+Allow: /contact
+
+# Crawl delay (optional)
+Crawl-delay: 1
