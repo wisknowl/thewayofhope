@@ -477,7 +477,7 @@ p {
 
 /* Footer */
 .footer {
-    background: white;
+    background: rgb(205, 219, 233);
     color: var(--dark-gray);
     padding: 60px 0 20px;
     border-top: 1px solid #e9ecef;
@@ -513,29 +513,93 @@ p {
     color: var(--text-gray);
 }
 
+/* Social Media Icons */
 .social-links {
     display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.social-links a {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: var(--primary-blue);
-    color: var(--background-white);
-    text-align: center;
-    line-height: 40px;
+.social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
-    transition: var(--transition);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
 }
 
-.social-links a:hover {
-    background: var(--accent-yellow);
-    color: var(--text-dark-grey);
-    transform: translateY(-2px);
+.social-icon svg {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
 }
+
+.social-icon:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Brand Colors */
+.social-icon.facebook {
+    color: #1877F2;
+}
+
+.social-icon.facebook:hover {
+    background: #1877F2;
+    color: white;
+}
+
+.social-icon.instagram {
+    color: #E4405F;
+}
+
+.social-icon.instagram:hover {
+    background: linear-gradient(45deg, #833AB4, #F77737, #E4405F);
+    color: white;
+}
+
+.social-icon.tiktok {
+    color: #000000;
+}
+
+.social-icon.tiktok:hover {
+    background: #000000;
+    color: white;
+}
+
+.social-icon.whatsapp {
+    color: #25D366;
+}
+
+.social-icon.whatsapp:hover {
+    background: #25D366;
+    color: white;
+}
+
+/* Responsive Design for Social Icons */
+@media (max-width: 768px) {
+    .social-links {
+        justify-content: center;
+        gap: 12px;
+    }
+    
+    .social-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .social-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Removed duplicate social links styles - using new SVG icon styles above */
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -776,10 +840,17 @@ p {
     transform: scale(0.95);
 }
 
-/* Kept the pulse animation for the heart icon ❤️ */
+/* SVG heart icon styling */
 .donate-icon {
-    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     animation: pulse 2s infinite;
+}
+
+.donate-icon svg {
+    width: 18px;
+    height: 18px;
 }
 
 .donate-text {
@@ -797,6 +868,156 @@ p {
 @media (max-width: 768px) {
     .floating-donate-btn {
         display: none;
+    }
+}
+
+/* ===== DYNAMIC NEWS SECTION ===== */
+.dynamic-news-container {
+    display: flex;
+    gap: 30px;
+    min-height: 400px;
+}
+
+.main-news-display {
+    flex: 3;
+    position: relative;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.news-slide {
+    display: none !important;
+}
+
+.news-slide.active {
+    display: block !important;
+}
+
+.news-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.news-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.news-prev {
+    left: 20px;
+}
+
+.news-next {
+    right: 20px;
+}
+
+.main-news-display:hover .news-nav {
+    opacity: 1;
+}
+
+.news-list-sidebar {
+    flex: 1;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.news-list {
+    /* Custom scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-blue) #f1f1f1;
+}
+
+.news-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.news-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb:hover {
+    background: #1a4f8c;
+}
+
+.news-list-item {
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Removed problematic active state styling that was overriding background images */
+
+.news-list-item:hover {
+    transform: translateX(5px);
+}
+
+/* Clickable News Styling */
+.clickable-news {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.clickable-news:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.clickable-news .news-overlay {
+    transition: all 0.3s ease;
+}
+
+.clickable-news:hover .news-overlay {
+    background: rgba(0,0,0,0.5);
+}
+
+.news-list-item.clickable-news:hover {
+    transform: translateX(5px);
+}
+
+/* Responsive Design for Dynamic News */
+@media (max-width: 768px) {
+    .dynamic-news-container {
+        flex-direction: column;
+    }
+    
+    .main-news-display {
+        flex: none;
+        margin-bottom: 20px;
+    }
+    
+    .news-list-sidebar {
+        flex: none;
+    }
+    
+    .news-nav {
+        opacity: 1;
     }
 }
 
@@ -1108,8 +1329,286 @@ p {
     transform: scale(1.05);
 }
 
+/* Get Involved Section - Full Height Layout */
+.get-involved-section .grid {
+    align-items: stretch;
+    min-height: 500px;
+}
+
+.get-involved-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
 .get-involved-content .section-title {
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.get-involved-content .content-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.get-involved-content .content-text h3 {
+    font-size: 1.4rem;
+    color: var(--text-dark-grey);
+    margin-bottom: 15px;
+    font-weight: 500;
+}
+
+.get-involved-content .content-text h2 {
+    font-size: 2.5rem;
+    color: var(--primary-blue);
+    margin-bottom: 25px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.get-involved-content .content-text p {
+    font-size: 1.1rem;
+    color: var(--text-light-grey);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.get-involved-content .content-text .lead {
+    font-size: 1.1rem;
+    color: var(--text-light-grey);
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.get-involved-content .content-button {
+    margin-top: auto;
+    padding-top: 40px;
+}
+
+/* Responsive Design for Get Involved */
+@media (max-width: 768px) {
+    .get-involved-section .grid {
+        min-height: auto;
+    }
+    
+    .get-involved-content {
+        height: auto;
+        padding: 30px 0;
+    }
+    
+    .get-involved-content .section-title {
+        height: auto;
+        padding: 20px 0;
+    }
+    
+    .get-involved-content .content-text {
+        justify-content: flex-start;
+    }
+    
+    .get-involved-content .content-text h2 {
+        font-size: 2rem;
+    }
+    
+    .get-involved-content .content-button {
+        margin-top: 30px;
+        padding-top: 0;
+    }
+}
+
+/* Programs Section - Two Programs with Overlapping Design */
+.program-item {
+    margin-bottom: 80px;
+}
+
+.program-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    min-height: 400px;
+}
+
+.program-image {
+    flex: 1;
+    height: 350px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.program-content {
+    flex: 1;
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 2;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Education Program - Text overlaps image from right */
+.education-program .program-content {
+    margin-left: -50px;
+}
+
+/* Health Program - Text overlaps image from left */
+.health-program .program-content {
+    margin-right: -50px;
+}
+
+.program-content h3 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--primary-blue);
+}
+
+.program-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    color: var(--text-light-grey);
+}
+
+/* Impact Statistics with Border Dividers */
+.impact-stat {
+    position: relative;
+}
+
+.impact-stat:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 1px;
+    background: var(--border-light);
+}
+
+/* Impact CTA Section */
+.impact-cta {
+    margin-top: 60px;
+    padding: 40px;
+    background: var(--primary-blue);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cta-content h3 {
+    color: white;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.cta-content p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.cta-button {
+    margin-left: 30px;
+}
+
+.cta-button .btn {
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid white;
+    padding: 12px 24px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.cta-button .btn:hover {
+    background: transparent;
+    color: white;
+    border-color: white;
+}
+
+/* Responsive Design for Impact CTA */
+@media (max-width: 768px) {
+    .impact-cta {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+    
+    .cta-button {
+        margin-left: 0;
+        margin-top: 20px;
+    }
+    
+    .cta-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .cta-content p {
+        font-size: 1rem;
+    }
+    
+    /* Hide border dividers on mobile */
+    .impact-stat:not(:last-child)::after {
+        display: none;
+    }
+}
+
+/* Responsive Design for Programs Section */
+@media (max-width: 768px) {
+    .programs-section {
+        padding: 60px 0;
+    }
+    
+    .program-container {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .program-image {
+        height: 250px;
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    .program-content {
+        margin: -30px 20px 0 20px;
+        padding: 30px;
+        min-height: auto;
+    }
+    
+    .education-program .program-content,
+    .health-program .program-content {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .program-content {
+        margin: -20px 15px 0 15px;
+        padding: 25px;
+    }
+    
+    .program-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .program-content p {
+        font-size: 1rem;
+    }
 }
 
 /* Stories Section */

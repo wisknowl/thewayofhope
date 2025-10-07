@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize slideshow
     initSlideshow();
     
+    // Initialize dynamic news
+    initDynamicNews();
+    
     // Mobile menu toggle
     const mobileMenuToggle = document.getElementById('mobileMenuToggle');
     const navMenu = document.getElementById('navMenu');
@@ -352,3 +355,116 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+// Dynamic News Functionality
+function initDynamicNews() {
+    const mainDisplay = document.querySelector('.main-news-display');
+    const newsList = document.querySelector('.news-list');
+    const newsSlides = document.querySelectorAll('.news-slide');
+    const newsItems = document.querySelectorAll('.news-list-item');
+    const prevBtn = document.querySelector('.news-prev');
+    const nextBtn = document.querySelector('.news-next');
+    
+    if (!mainDisplay || !newsList || newsSlides.length === 0) return;
+    
+    let currentNewsIndex = 0;
+    let newsInterval;
+    let isPaused = false;
+    
+    // Auto-rotate news every 4 seconds (only through the 3 latest news in div1)
+    function startNewsRotation() {
+        newsInterval = setInterval(() => {
+            if (!isPaused) {
+                nextNews();
+            }
+        }, 4000);
+    }
+    
+    // Stop auto-rotation
+    function stopNewsRotation() {
+        clearInterval(newsInterval);
+    }
+    
+    // Show specific news (only affects div1 slides)
+    function showNews(index) {
+        // Hide all slides in div1
+        newsSlides.forEach(slide => {
+            slide.classList.remove('active');
+            slide.style.display = 'none';
+        });
+        
+        // Show current slide in div1
+        if (newsSlides[index]) {
+            newsSlides[index].classList.add('active');
+            newsSlides[index].style.display = 'block';
+        }
+        
+        // NOTE: Removed automatic div2 active state updates
+        // div2 items will only change when clicked directly
+        
+        currentNewsIndex = index;
+    }
+    
+    // Next news (cycles through only the 3 slides in div1)
+    function nextNews() {
+        const nextIndex = (currentNewsIndex + 1) % newsSlides.length;
+        showNews(nextIndex);
+    }
+    
+    // Previous news
+    function prevNews() {
+        const prevIndex = (currentNewsIndex - 1 + newsSlides.length) % newsSlides.length;
+        showNews(prevIndex);
+    }
+    
+    // Pause on hover (only div1)
+    function pauseNews() {
+        isPaused = true;
+    }
+    
+    // Resume on mouse leave (only div1)
+    function resumeNews() {
+        isPaused = false;
+    }
+    
+    // Event listeners for arrow buttons
+    if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            prevNews();
+        });
+    }
+    
+    if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            nextNews();
+        });
+    }
+    
+            // News item clicks in div2 (static list)
+            newsItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    // Only allow clicking on the first 3 items (corresponding to div1 slides)
+                    if (index < newsSlides.length) {
+                        // Update div1 slides
+                        showNews(index);
+                        
+                        // Update div2 active states independently
+                        newsItems.forEach(item => item.classList.remove('active'));
+                        item.classList.add('active');
+                        
+                        // Pause auto-rotation temporarily after manual selection
+                        stopNewsRotation();
+                        setTimeout(startNewsRotation, 3000);
+                    }
+                });
+            });
+    
+    // Hover events for pause/resume (only on div1)
+    mainDisplay.addEventListener('mouseenter', pauseNews);
+    mainDisplay.addEventListener('mouseleave', resumeNews);
+    
+    // Start auto-rotation (cycles through the 3 slides in div1)
+    startNewsRotation();
+}

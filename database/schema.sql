@@ -27,21 +27,6 @@ CREATE TABLE volunteers (
     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending'
 );
 
--- Donations table
-CREATE TABLE donations (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    donor_name VARCHAR(100) NOT NULL,
-    donor_email VARCHAR(100) NOT NULL,
-    amount DECIMAL(10,2) NOT NULL,
-    currency VARCHAR(3) DEFAULT 'XAF',
-    payment_method ENUM('paypal', 'mtn_momo', 'orange_money', 'bank_transfer') NOT NULL,
-    payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
-    program_id INT,
-    is_recurring BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (program_id) REFERENCES programs(id)
-);
-
 -- Programs table
 CREATE TABLE programs (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,6 +43,22 @@ CREATE TABLE programs (
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Donations table
+CREATE TABLE donations (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    donor_name VARCHAR(100) NOT NULL,
+    donor_email VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    currency VARCHAR(3) DEFAULT 'XAF',
+    payment_method ENUM('paypal', 'mtn_momo', 'orange_money', 'bank_transfer') NOT NULL,
+    payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    program_id INT,
+    is_recurring BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (program_id) REFERENCES programs(id)
+);
+
 
 -- News/Blog posts table
 CREATE TABLE posts (
@@ -173,7 +174,7 @@ CREATE TABLE site_settings (
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (username, email, password, role) VALUES 
-('admin', 'admin@thewayofhope.org', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin');
+('admin', 'admin@thewayofhope.org', '$2y$10$qCNgC23l8yPduhu10ysI3eZLAfOzn7aLg27ULqOxaYIsyk6Impy5K', 'admin');
 
 -- Insert default programs
 INSERT INTO programs (name_en, name_fr, name_es, description_en, description_fr, description_es) VALUES 
@@ -188,7 +189,7 @@ INSERT INTO site_settings (setting_key, setting_value) VALUES
 ('site_title_en', 'The Way of Hope'),
 ('site_title_fr', 'La Voie de l\'Espoir'),
 ('site_title_es', 'El Camino de la Esperanza'),
-('contact_email', 'info@thewayofhope.org'),
+('contact_email', 'info@thewayofhopeglobal.org'),
 ('contact_phone', '+237 6XX XXX XXX'),
 ('address', 'Bafang, Cameroon'),
 ('funds_raised', '0'),
