@@ -233,6 +233,9 @@ p {
     padding: 0 2rem;
     width: 100%;
 }
+.hero-content p{
+    color: rgba(255,255,255,0.95);
+}
 
 .hero h1 {
     font-size: 3.5rem;
@@ -507,7 +510,7 @@ p {
 }
 
 .footer-bottom {
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid #ffffed;
     padding-top: 2rem;
     text-align: center;
     color: var(--text-gray);
@@ -1708,5 +1711,79 @@ p {
     
     .impact-stat {
         padding: 20px 15px;
+    }
+}
+
+/* Payment Method Options */
+.payment-method-option {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.payment-method-option:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.payment-method-option input[type="radio"]:checked + div {
+    font-weight: 700;
+}
+
+.payment-method-option:has(input[type="radio"]:checked) {
+    border-color: var(--primary-blue) !important;
+    box-shadow: 0 0 0 3px rgba(26, 79, 140, 0.1);
+}
+
+/* Payment method specific hover effects */
+.payment-method-option[style*="stripe"]:hover {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%) !important;
+}
+
+.payment-method-option[style*="credit_card"]:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+}
+
+.payment-method-option[style*="paypal"]:hover {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%) !important;
+}
+
+.payment-method-option[style*="mtn_momo"]:hover {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+}
+
+.payment-method-option[style*="orange_money"]:hover {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%) !important;
+}
+
+.payment-method-option[style*="bank_transfer"]:hover {
+    background: linear-gradient(135deg, #78716c 0%, #57534e 100%) !important;
+}
+
+/* Payment background icons animation */
+.payment-bg {
+    transition: all 0.3s ease;
+}
+
+.payment-method-option:hover .payment-bg {
+    opacity: 0.2 !important;
+    transform: scale(1.1);
+}
+
+/* Responsive payment methods */
+@media (max-width: 768px) {
+    .payment-method-option {
+        padding: 0.75rem !important;
+    }
+    
+    .payment-method-option .payment-bg {
+        font-size: 2rem !important;
+        top: -5px !important;
+        right: -5px !important;
+    }
+    
+    .payment-method-option .payment-bg svg {
+        width: 40px !important;
+        height: 40px !important;
     }
 }

@@ -15,51 +15,70 @@ $content = ob_start();
 </section>
 
 <!-- Donation Form -->
-<section class="section">
+<section class="section" style="background: rgb(205, 219, 233);">
     <div class="container">
         <div style="max-width: 800px; margin: 0 auto;">
             <div class="card">
                 <div class="card-header">
                     <h2>Make a Donation</h2>
-                    <p>Choose your donation amount and payment method. All donations are secure and tax-deductible.</p>
+                    <p style="color: rgba(255,255,255,0.95);">Choose your donation amount and payment method. All donations are secure and tax-deductible.</p>
                 </div>
                 
                 <div class="card-body">
                     <form action="/api/donation" method="POST" id="donationForm">
                         <input type="hidden" name="csrf_token" value="<?php echo Security::generateCSRFToken(); ?>">
                         
+                        <!-- Donation Type Selection -->
+                        <div class="form-group">
+                            <label class="form-label">Donation Type *</label>
+                            <div class="donation-type-buttons" style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+                                <label class="donation-type-btn" style="flex: 1; cursor: pointer;">
+                                    <input type="radio" name="donation_type" value="one_time" checked style="display: none;">
+                                    <div class="donation-btn" style="padding: 1rem 2rem; border: 2px solid var(--primary-blue); border-radius: var(--border-radius); text-align: center; transition: all 0.3s ease; background: var(--primary-blue); color: white; font-weight: 600;">
+                                        One Time
+                                    </div>
+                                </label>
+                                <label class="donation-type-btn" style="flex: 1; cursor: pointer;">
+                                    <input type="radio" name="donation_type" value="monthly" style="display: none;">
+                                    <div class="donation-btn" style="padding: 1rem 2rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); text-align: center; transition: all 0.3s ease; background: white; color: var(--text-dark-grey); font-weight: 600;">
+                                        Monthly
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
                         <div class="form-group">
                             <label class="form-label"><?php echo $this->translate('donate_amount', 'Donation Amount'); ?> *</label>
                             <div class="grid grid-4" style="margin-bottom: 1rem;">
                                 <label style="text-align: center; cursor: pointer;">
-                                    <input type="radio" name="amount" value="5000" style="margin-right: 0.5rem;">
+                                    <input type="radio" name="amount" value="25" style="margin-right: 0.5rem;">
                                     <div style="padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); transition: var(--transition);">
-                                        <strong>5,000 XAF</strong>
+                                        <strong>$25</strong>
                                     </div>
                                 </label>
                                 <label style="text-align: center; cursor: pointer;">
-                                    <input type="radio" name="amount" value="10000" style="margin-right: 0.5rem;">
+                                    <input type="radio" name="amount" value="50" style="margin-right: 0.5rem;">
                                     <div style="padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); transition: var(--transition);">
-                                        <strong>10,000 XAF</strong>
+                                        <strong>$50</strong>
                                     </div>
                                 </label>
                                 <label style="text-align: center; cursor: pointer;">
-                                    <input type="radio" name="amount" value="25000" style="margin-right: 0.5rem;">
+                                    <input type="radio" name="amount" value="100" style="margin-right: 0.5rem;">
                                     <div style="padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); transition: var(--transition);">
-                                        <strong>25,000 XAF</strong>
+                                        <strong>$100</strong>
                                     </div>
                                 </label>
                                 <label style="text-align: center; cursor: pointer;">
-                                    <input type="radio" name="amount" value="50000" style="margin-right: 0.5rem;">
+                                    <input type="radio" name="amount" value="250" style="margin-right: 0.5rem;">
                                     <div style="padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); transition: var(--transition);">
-                                        <strong>50,000 XAF</strong>
+                                        <strong>$250</strong>
                                     </div>
                                 </label>
                             </div>
                             
                             <div class="form-group">
                                 <label for="custom_amount">Or enter custom amount:</label>
-                                <input type="number" id="custom_amount" name="custom_amount" class="form-control" placeholder="Enter amount in XAF" min="1000">
+                                <input type="number" id="custom_amount" name="custom_amount" class="form-control" placeholder="Enter amount in USD" min="5">
                             </div>
                         </div>
                         
@@ -80,46 +99,94 @@ $content = ob_start();
                         <div class="form-group">
                             <label class="form-label"><?php echo $this->translate('donate_method', 'Payment Method'); ?> *</label>
                             <div class="grid grid-2">
-                                <label style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: var(--transition);">
-                                    <input type="radio" name="payment_method" value="paypal" style="margin-right: 0.5rem;">
-                                    <div>
+                                <!-- Stripe Payment Method -->
+                                <label class="payment-method-option" style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; background: linear-gradient(135deg, #635bff 0%, #4f46e5 100%);">
+                                    <input type="radio" name="payment_method" value="stripe" style="margin-right: 0.5rem; z-index: 2; position: relative;">
+                                    <div style="color: white; z-index: 2; position: relative;">
+                                        <strong>Stripe</strong>
+                                        <br><small style="opacity: 0.9;">Cards, Apple Pay, Google Pay</small>
+                                    </div>
+                                    <div class="payment-bg" style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 3rem; color: white;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.274 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.571-2.354 1.571-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z"/>
+                                        </svg>
+                                    </div>
+                                </label>
+
+                                <!-- PayPal Payment Method -->
+                                <label class="payment-method-option" style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; background: linear-gradient(135deg, #0070ba 0%, #005ea6 100%);">
+                                    <input type="radio" name="payment_method" value="paypal" style="margin-right: 0.5rem; z-index: 2; position: relative;">
+                                    <div style="color: white; z-index: 2; position: relative;">
                                         <strong>PayPal</strong>
-                                        <br><small>International payments</small>
+                                        <br><small style="opacity: 0.9;">International payments</small>
+                                    </div>
+                                    <div class="payment-bg" style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 3rem; color: white;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.068-.42c-.23-1.18-1.02-2.08-2.22-2.51-.81-.29-1.78-.37-2.82-.37H8.89a.641.641 0 0 0-.633.74l-1.47 9.31h3.71l.8-5.08a.641.641 0 0 1 .633-.74h1.88c3.42 0 6.08-1.39 6.82-5.44.23-1.25.14-2.36-.35-3.19z"/>
+                                        </svg>
                                     </div>
                                 </label>
                                 
-                                <label style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: var(--transition);">
-                                    <input type="radio" name="payment_method" value="mtn_momo" style="margin-right: 0.5rem;">
-                                    <div>
-                                        <strong>MTN Mobile Money</strong>
-                                        <br><small>Local mobile payments</small>
+                                <!-- Debit/Credit Card Payment Method -->
+                                <label class="payment-method-option" style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);">
+                                    <input type="radio" name="payment_method" value="credit_card" style="margin-right: 0.5rem; z-index: 2; position: relative;">
+                                    <div style="color: white; z-index: 2; position: relative;">
+                                        <strong>Debit/Credit Card</strong>
+                                        <br><small style="opacity: 0.9;">Visa, Mastercard, American Express</small>
+                                    </div>
+                                    <div class="payment-bg" style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 3rem; color: white;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                                        </svg>
                                     </div>
                                 </label>
+
                                 
-                                <label style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: var(--transition);">
-                                    <input type="radio" name="payment_method" value="orange_money" style="margin-right: 0.5rem;">
-                                    <div>
-                                        <strong>Orange Money</strong>
-                                        <br><small>Local mobile payments</small>
-                                    </div>
-                                </label>
-                                
-                                <label style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: var(--transition);">
-                                    <input type="radio" name="payment_method" value="bank_transfer" style="margin-right: 0.5rem;">
-                                    <div>
+                                <!-- Bank Transfer -->
+                                <label class="payment-method-option" style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);">
+                                    <input type="radio" name="payment_method" value="bank_transfer" style="margin-right: 0.5rem; z-index: 2; position: relative;">
+                                    <div style="color: white; z-index: 2; position: relative;">
                                         <strong>Bank Transfer</strong>
-                                        <br><small>Direct bank transfer</small>
+                                        <br><small style="opacity: 0.9;">Direct bank transfer</small>
+                                    </div>
+                                    <div class="payment-bg" style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 3rem; color: white;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
                                     </div>
                                 </label>
+                                
+                                <!-- MTN Mobile Money -->
+                                <label class="payment-method-option" style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; background: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);">
+                                    <input type="radio" name="payment_method" value="mtn_momo" style="margin-right: 0.5rem; z-index: 2; position: relative;">
+                                    <div style="color: white; z-index: 2; position: relative;">
+                                        <strong>MTN Mobile Money</strong>
+                                        <br><small style="opacity: 0.9;">Local mobile payments</small>
+                                    </div>
+                                    <div class="payment-bg" style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 3rem; color: white;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                    </div>
+                                </label>
+                                
+                                <!-- Orange Money -->
+                                <label class="payment-method-option" style="display: flex; align-items: center; padding: 1rem; border: 2px solid var(--border-light); border-radius: var(--border-radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">
+                                    <input type="radio" name="payment_method" value="orange_money" style="margin-right: 0.5rem; z-index: 2; position: relative;">
+                                    <div style="color: white; z-index: 2; position: relative;">
+                                        <strong>Orange Money</strong>
+                                        <br><small style="opacity: 0.9;">Local mobile payments</small>
+                                    </div>
+                                    <div class="payment-bg" style="position: absolute; top: -10px; right: -10px; opacity: 0.1; font-size: 3rem; color: white;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                    </div>
+                                </label>
+                                
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label style="display: flex; align-items: center; gap: 0.5rem;">
-                                <input type="checkbox" name="is_recurring" value="1">
-                                <span><?php echo $this->translate('donate_recurring', 'Make this a recurring donation'); ?></span>
-                            </label>
-                        </div>
                         
                         <div class="grid grid-2">
                             <div class="form-group">
@@ -151,7 +218,7 @@ $content = ob_start();
 </section>
 
 <!-- Non-Cash Donations -->
-<section class="section" style="background: #f8f9fa;">
+<section class="section" style="background: #ffffed;">
     <div class="container">
         <div class="section-title">
             <h2>Non-Cash Donations</h2>
@@ -201,7 +268,7 @@ $content = ob_start();
         
         <div style="text-align: center; margin-top: 2rem;">
             <p><strong>To arrange non-cash donations, please contact us:</strong></p>
-            <p>Email: info@thewayofhope.org | Phone: +237 6XX XXX XXX</p>
+            <p>Email: info@thewayofhope.org | Phone: +1 (202) 843 4615</p>
         </div>
     </div>
 </section>
@@ -220,7 +287,7 @@ $content = ob_start();
                 <div class="card">
                     <div class="card-body" style="text-align: center;">
                         <div style="font-size: 2rem; margin-bottom: 1rem;">💝</div>
-                        <h4><?php echo number_format($donation['amount']); ?> XAF</h4>
+                        <h4>$<?php echo number_format($donation['amount']); ?></h4>
                         <p><strong>From:</strong> <?php echo $donation['donor_name']; ?></p>
                         <p><strong>Method:</strong> <?php echo ucfirst(str_replace('_', ' ', $donation['payment_method'])); ?></p>
                         <p><strong>Date:</strong> <?php echo date('M j, Y', strtotime($donation['created_at'])); ?></p>
@@ -233,6 +300,28 @@ $content = ob_start();
 <?php endif; ?>
 
 <script>
+// Handle donation type button selection
+document.querySelectorAll('.donation-type-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.donation-type-btn').forEach(btn => {
+            const btnDiv = btn.querySelector('.donation-btn');
+            btnDiv.style.background = 'white';
+            btnDiv.style.color = 'var(--text-dark-grey)';
+            btnDiv.style.borderColor = 'var(--border-light)';
+        });
+        
+        // Add active class to clicked button
+        const btnDiv = this.querySelector('.donation-btn');
+        btnDiv.style.background = 'var(--primary-blue)';
+        btnDiv.style.color = 'white';
+        btnDiv.style.borderColor = 'var(--primary-blue)';
+        
+        // Check the radio button
+        this.querySelector('input[type="radio"]').checked = true;
+    });
+});
+
 document.getElementById('donationForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
