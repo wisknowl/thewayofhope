@@ -22,6 +22,7 @@ class Router {
             '/programs/vocational' => ['controller' => 'ProgramsController', 'action' => 'vocational'],
             '/programs/rights' => ['controller' => 'ProgramsController', 'action' => 'rights'],
             '/programs/disability' => ['controller' => 'ProgramsController', 'action' => 'disability'],
+            '/rare-diseases' => ['controller' => 'RareDiseasesController', 'action' => 'index'],
             '/get-involved' => ['controller' => 'InvolvementController', 'action' => 'index'],
             '/volunteer' => ['controller' => 'InvolvementController', 'action' => 'volunteer'],
             '/donate' => ['controller' => 'DonationController', 'action' => 'index'],

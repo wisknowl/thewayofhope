@@ -62,31 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Language switcher
-    const languageLinks = document.querySelectorAll('.language-switcher a');
-    languageLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const lang = this.getAttribute('href').split('lang=')[1];
-            
-            // Send AJAX request to change language
-            fetch(this.getAttribute('href'), {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                }
-            })
-            .catch(error => {
-                console.error('Language switch error:', error);
-                location.reload();
-            });
-        });
-    });
+    // Language switcher - removed AJAX, using normal page navigation
 });
 
 // Slideshow functionality

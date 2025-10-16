@@ -16,8 +16,12 @@ class ApiController extends BaseController {
         }
         
         if (in_array($language, SUPPORTED_LANGUAGES)) {
-            $this->language::setLanguage($language);
-            $this->jsonResponse(['success' => true, 'language' => $language]);
+            Language::setLanguage($language);
+            
+            // Redirect back to the referring page or homepage
+            $redirectUrl = $_SERVER['HTTP_REFERER'] ?? dirname($_SERVER['SCRIPT_NAME']) . '/';
+            header('Location: ' . $redirectUrl);
+            exit;
         } else {
             $this->jsonResponse(['success' => false, 'message' => 'Invalid language'], 400);
         }
