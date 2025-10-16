@@ -12,6 +12,7 @@ define('DB_CHARSET', 'utf8mb4');
 
 // Site configuration
 define('SITE_URL', 'https://thewayofhope.org');
+define('BASE_URL', 'http://localhost/thewayofhope/public'); // For local development
 define('SITE_NAME', 'The Way of Hope');
 define('SITE_SLOGAN_EN', 'Break down inequalities across all layers of society.');
 define('SITE_SLOGAN_FR', 'Briser les inégalités entre toutes les couches de la société.');
@@ -21,8 +22,8 @@ define('ENCRYPTION_KEY', 'your-secure-encryption-key-here');
 define('SESSION_TIMEOUT', 3600); // 1 hour
 
 // Payment gateway settings
-define('PAYPAL_CLIENT_ID', 'your-paypal-client-id');
-define('PAYPAL_CLIENT_SECRET', 'your-paypal-secret');
+define('PAYPAL_CLIENT_ID', 'AQNZTsdCmiGb1V5btOWHGUsbG5p8aYnzq_0HJQm8NDQIhSZ1Qyce4OoYcPTs7Wv-PDJ8Uf4_u5IV4m_5');
+define('PAYPAL_CLIENT_SECRET', 'EOjAOj-GS4HPlvuTggG8stjCJiFtL8SSlXSEYL-pvu3jV9UbXK_rK5C1HjP57tnAJmcvrRyevwk8JY_2');
 define('PAYPAL_MODE', 'sandbox'); // or 'live'
 
 // Email settings

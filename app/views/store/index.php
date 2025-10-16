@@ -3,6 +3,9 @@
 $content = ob_start();
 ?>
 
+<!-- Include Coming Soon Modal Component -->
+<?php include '../app/components/coming-soon-modal.php'; ?>
+
 <!-- Store Hero Section -->
 <section class="store-hero" style="height: 68vh; position: relative;">
     <?php include __DIR__ . '/../../components/header.php'; ?>
@@ -227,6 +230,11 @@ function checkout() {
     alert('Checkout functionality would be implemented here.');
     closeCart();
 }
+
+// Show Coming Soon Modal on page load
+document.addEventListener('DOMContentLoaded', function() {
+    showComingSoonModal();
+});
 </script>
 
 <?php

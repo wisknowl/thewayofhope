@@ -53,6 +53,7 @@ CREATE TABLE donations (
     currency VARCHAR(3) DEFAULT 'USD',
     payment_method ENUM('stripe', 'credit_card', 'paypal', 'mtn_momo', 'orange_money', 'bank_transfer') NOT NULL,
     payment_status ENUM('pending', 'completed', 'failed') DEFAULT 'pending',
+    payment_reference VARCHAR(255),
     program_id INT,
     is_recurring BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -169,6 +169,9 @@ function initSlideshow() {
 
 // Form validation and AJAX submission
 function initFormHandlers() {
+    // REMOVED: All AJAX form handlers - now using standard HTTP form submission
+    // This eliminates JavaScript interference, caching issues, and makes forms more reliable
+    /*
     // Contact form
     const contactForm = document.querySelector('form[action*="contact"]');
     if (contactForm) {
@@ -195,6 +198,7 @@ function initFormHandlers() {
             submitForm(this, '/api/donation');
         });
     }
+    */
 }
 
 function submitForm(form, endpoint) {

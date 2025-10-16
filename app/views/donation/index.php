@@ -3,6 +3,9 @@
 $content = ob_start();
 ?>
 
+<!-- PayPal SDK -->
+<script src="https://www.paypal.com/sdk/js?client-id=<?php echo PAYPAL_CLIENT_ID; ?>&currency=USD"></script>
+
 <!-- Donate Hero Section -->
 <section class="donate-hero" style="height: 68vh; position: relative;">
     <?php include __DIR__ . '/../../components/header.php'; ?>
@@ -25,7 +28,7 @@ $content = ob_start();
                 </div>
                 
                 <div class="card-body">
-                    <form action="/api/donation" method="POST" id="donationForm">
+                    <form action="<?php echo dirname($_SERVER['SCRIPT_NAME']); ?>/api/donation" method="POST" id="donationForm">
                         <input type="hidden" name="csrf_token" value="<?php echo Security::generateCSRFToken(); ?>">
                         
                         <!-- Donation Type Selection -->
@@ -190,14 +193,20 @@ $content = ob_start();
                         
                         <div class="grid grid-2">
                             <div class="form-group">
-                                <label class="form-label" for="donor_name">Donor Name *</label>
-                                <input type="text" id="donor_name" name="donor_name" class="form-control" required>
+                                <label class="form-label" for="donor_name">Donor Name <span style="color: var(--text-light-grey); font-size: 0.9rem;">(Optional)</span></label>
+                                <input type="text" id="donor_name" name="donor_name" class="form-control" placeholder="Leave blank to donate anonymously">
                             </div>
                             
                             <div class="form-group">
-                                <label class="form-label" for="donor_email">Email Address *</label>
-                                <input type="email" id="donor_email" name="donor_email" class="form-control" required>
+                                <label class="form-label" for="donor_email">Email Address <span style="color: var(--text-light-grey); font-size: 0.9rem;">(Optional)</span></label>
+                                <input type="email" id="donor_email" name="donor_email" class="form-control" placeholder="For donation receipt (optional)">
                             </div>
+                        </div>
+                        
+                        <div style="background: #fff3cd; padding: 1.5rem; border-radius: var(--border-radius); margin: 1rem 0; border: 1px solid #ffeaa7;">
+                            <p style="margin: 0; color: #856404; font-size: 0.95rem;">
+                                ℹ️ <strong>Anonymous Donations:</strong> You can donate without providing your name or email. However, providing your email allows us to send you a donation receipt and keep you updated on how your contribution is making a difference.
+                            </p>
                         </div>
                         
                         <div style="background: #e7f3ff; padding: 1.5rem; border-radius: var(--border-radius); margin: 2rem 0;">
@@ -209,6 +218,9 @@ $content = ob_start();
                             <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.125rem;">Donate Now</button>
                         </div>
                     </form>
+                    
+                    <!-- PayPal Button Container (Hidden by default) -->
+                    <div id="paypal-button-container" style="display: none; margin-top: 2rem; text-align: center;"></div>
                     
                     <div id="formMessage" style="margin-top: 1rem; display: none;"></div>
                 </div>
@@ -322,11 +334,14 @@ document.querySelectorAll('.donation-type-btn').forEach(button => {
     });
 });
 
+// COMMENTED OUT: JavaScript form submission - now using normal form submission
+/*
 document.getElementById('donationForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
     const messageDiv = document.getElementById('formMessage');
+    const paymentMethod = formData.get('payment_method');
     
     // Show loading state
     const submitBtn = this.querySelector('button[type="submit"]');
@@ -340,11 +355,17 @@ document.getElementById('donationForm').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        messageDiv.style.display = 'block';
         if (data.success) {
-            messageDiv.innerHTML = '<div style="color: green; padding: 1rem; background: #d4edda; border: 1px solid #c3e6cb; border-radius: var(--border-radius);">Donation recorded successfully! You will be redirected to the payment gateway.</div>';
-            // In a real implementation, redirect to payment gateway
+            if (paymentMethod === 'paypal') {
+                // Replace form with PayPal button
+                replaceFormWithPayPal(data, formData);
+            } else {
+                // For other payment methods, show success message
+                messageDiv.style.display = 'block';
+                messageDiv.innerHTML = '<div style="color: green; padding: 1rem; background: #d4edda; border: 1px solid #c3e6cb; border-radius: var(--border-radius);">' + data.message + '</div>';
+            }
         } else {
+            messageDiv.style.display = 'block';
             messageDiv.innerHTML = '<div style="color: red; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: var(--border-radius);">Error: ' + data.message + '</div>';
         }
     })
@@ -357,6 +378,7 @@ document.getElementById('donationForm').addEventListener('submit', function(e) {
         submitBtn.disabled = false;
     });
 });
+*/
 
 // Handle custom amount input
 document.getElementById('custom_amount').addEventListener('input', function() {
@@ -375,6 +397,77 @@ document.querySelectorAll('input[name="amount"]').forEach(radio => {
         }
     });
 });
+
+// PayPal Integration Functions
+function replaceFormWithPayPal(data, formData) {
+    const form = document.getElementById('donationForm');
+    const paypalContainer = document.getElementById('paypal-button-container');
+    const messageDiv = document.getElementById('formMessage');
+    
+    // Store donation ID for later use
+    const donationId = data.donation_id;
+    const orderId = data.order_id;
+    
+    // Hide the form
+    form.style.display = 'none';
+    
+    // Show PayPal container
+    paypalContainer.style.display = 'block';
+    
+    // Initialize PayPal button
+    if (typeof paypal !== 'undefined') {
+        paypal.Buttons({
+            createOrder: function(data, actions) {
+                return Promise.resolve(orderId);
+            },
+            onApprove: function(data, actions) {
+                // Capture the payment
+                return fetch('/api/donation/capture', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `order_id=${data.orderID}&donation_id=${donationId}`
+                })
+                .then(response => response.json())
+                .then(captureData => {
+                    if (captureData.success) {
+                        messageDiv.style.display = 'block';
+                        messageDiv.innerHTML = '<div style="color: green; padding: 1rem; background: #d4edda; border: 1px solid #c3e6cb; border-radius: var(--border-radius);">Payment successful! Thank you for your donation.</div>';
+                        paypalContainer.style.display = 'none';
+                    } else {
+                        messageDiv.style.display = 'block';
+                        messageDiv.innerHTML = '<div style="color: red; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: var(--border-radius);">Payment failed: ' + captureData.message + '</div>';
+                    }
+                })
+                .catch(error => {
+                    messageDiv.style.display = 'block';
+                    messageDiv.innerHTML = '<div style="color: red; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: var(--border-radius);">Payment processing error. Please try again.</div>';
+                });
+            },
+            onCancel: function(data) {
+                messageDiv.style.display = 'block';
+                messageDiv.innerHTML = '<div style="color: orange; padding: 1rem; background: #fff3cd; border: 1px solid #ffeaa7; border-radius: var(--border-radius);">Payment cancelled. You can try again or choose a different payment method.</div>';
+                // Show form again
+                form.style.display = 'block';
+                paypalContainer.style.display = 'none';
+            },
+            onError: function(err) {
+                messageDiv.style.display = 'block';
+                messageDiv.innerHTML = '<div style="color: red; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: var(--border-radius);">PayPal error occurred. Please try again or choose a different payment method.</div>';
+                // Show form again
+                form.style.display = 'block';
+                paypalContainer.style.display = 'none';
+            }
+        }).render('#paypal-button-container');
+    } else {
+        messageDiv.style.display = 'block';
+        messageDiv.innerHTML = '<div style="color: red; padding: 1rem; background: #f8d7da; border: 1px solid #f5c6cb; border-radius: var(--border-radius);">PayPal SDK not loaded. Please refresh the page and try again.</div>';
+        // Show form again
+        form.style.display = 'block';
+        paypalContainer.style.display = 'none';
+    }
+}
 </script>
 
 <?php

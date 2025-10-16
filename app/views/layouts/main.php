@@ -114,7 +114,13 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; <?php echo date('Y'); ?> The Way of Hope. All rights reserved.</p>
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <p>&copy; <?php echo date('Y'); ?> The Way of Hope. All rights reserved.</p>
+                    <div style="display: flex; gap: 2rem;">
+                        <a href="<?php echo dirname($_SERVER['SCRIPT_NAME']); ?>/privacy" style="color: var(--text-light-grey); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease;" onmouseover="this.style.color='var(--primary-blue)'" onmouseout="this.style.color='var(--text-light-grey)'">Privacy Policy</a>
+                        <a href="<?php echo dirname($_SERVER['SCRIPT_NAME']); ?>/terms" style="color: var(--text-light-grey); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease;" onmouseover="this.style.color='var(--primary-blue)'" onmouseout="this.style.color='var(--text-light-grey)'">Terms & Conditions</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>

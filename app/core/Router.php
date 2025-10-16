@@ -25,6 +25,11 @@ class Router {
             '/get-involved' => ['controller' => 'InvolvementController', 'action' => 'index'],
             '/volunteer' => ['controller' => 'InvolvementController', 'action' => 'volunteer'],
             '/donate' => ['controller' => 'DonationController', 'action' => 'index'],
+            '/donation/success' => ['controller' => 'DonationController', 'action' => 'success'],
+            '/donation/subscription-success' => ['controller' => 'DonationController', 'action' => 'subscriptionSuccess'],
+            '/donation/cancel' => ['controller' => 'DonationController', 'action' => 'cancel'],
+            '/subscription/manage' => ['controller' => 'DonationController', 'action' => 'manageSubscription'],
+            '/subscription/cancel' => ['controller' => 'DonationController', 'action' => 'cancelSubscription'],
             '/news' => ['controller' => 'NewsController', 'action' => 'index'],
             '/news/([0-9]+)' => ['controller' => 'NewsController', 'action' => 'show'],
             '/events' => ['controller' => 'EventsController', 'action' => 'index'],
@@ -32,6 +37,8 @@ class Router {
             '/store' => ['controller' => 'StoreController', 'action' => 'index'],
             '/store/product/([0-9]+)' => ['controller' => 'StoreController', 'action' => 'product'],
             '/contact' => ['controller' => 'ContactController', 'action' => 'index'],
+            '/privacy' => ['controller' => 'PrivacyController', 'action' => 'index'],
+            '/terms' => ['controller' => 'TermsController', 'action' => 'index'],
             
             // Admin routes
             '/admin' => ['controller' => 'AdminController', 'action' => 'dashboard'],
@@ -73,6 +80,8 @@ class Router {
             '/api/contact' => ['controller' => 'ApiController', 'action' => 'contact'],
             '/api/volunteer' => ['controller' => 'ApiController', 'action' => 'volunteer'],
             '/api/donation' => ['controller' => 'ApiController', 'action' => 'donation'],
+            '/api/donation/capture' => ['controller' => 'ApiController', 'action' => 'capturePayPalPayment'],
+            '/api/webhooks/paypal' => ['controller' => 'ApiController', 'action' => 'paypalWebhook'],
         ];
     }
     
